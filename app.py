@@ -37,12 +37,13 @@ def upload():
     for key, value in list(form.items()):
         print(key, "=>", value)
 
+    print(request.files)
     for upload in request.files.getlist("file"):
-        filename = upload.filename.rsplit("\")[0]
+        filename = os.path.normcase(upload.filename)
         destination = "/".join([target, filename])
         print("Accept incoming file:", filename)
-        print("Save it to:", destination)
-        upload.save(destination)
+        print("Save it to:", filename)
+        upload.save(filename)
 
     if is_ajax:
         return ajax_response(True, upload_key)

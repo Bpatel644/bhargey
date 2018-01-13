@@ -1,2 +1,9 @@
 
 static/uploads/
+node_modules/
+package-lock.json
+frontend/
+venv/
+dist/
+
+run\.pyc

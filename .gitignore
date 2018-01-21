@@ -9,3 +9,4 @@ frontend/package-lock.json
 *.code-workspace
 
 venv/
+run.pyc

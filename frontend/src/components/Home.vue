@@ -31,7 +31,9 @@
 
           <button :class="buttonClick" @click="buttonClassSwitch" >
               <div class='icon'>
-                <i class="far" :class="buttonIconClass"></i>
+                <i v-show="buttonClick.remove"  class="far" :class="buttonIconClass"></i>
+                <i v-show="buttonClick.confirm"  class="far" :class="buttonIconClass"></i>
+                <i v-show="buttonClick.done"  class="far" :class="buttonIconClass"></i>
               </div>
               <div class='text'>
                 <span>{{ buttonMessage }}</span>

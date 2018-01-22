@@ -3,6 +3,9 @@ from uuid import uuid4
 import os 
 import json 
 import glob
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 app = Flask(__name__,
             static_folder = "./dist/static",

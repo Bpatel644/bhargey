@@ -53,6 +53,8 @@ export default {
       options: {
         url: '/upload',
         paramName: 'file',
+        uploadMultiple: false,
+        maxFiles: 1,
         acceptedFiles: {
           extensions: ['image/*'],
           message: 'You are uploading an invalid file'
@@ -66,6 +68,11 @@ export default {
   methods: {
     fileAdded (file) {
       this.files.push(file)
+      this
+        .$http
+        .post(`upload/${file.customAttributes.id}`)
+        .then(console.log)
+        .catch(console.error)
     },
     buttonClassSwitch () {
       this.buttonStatus++

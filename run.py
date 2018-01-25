@@ -2,8 +2,8 @@ import os
 import glob
 import sys
 
-from flask import Flask, render_template, request, redirect, url_for
 from uuid import uuid4
+from flask import Flask, render_template, request, redirect, url_for
 
 reload(sys)
 sys.setdefaultencoding("utf-8")
@@ -17,52 +17,50 @@ def catch_all(path):
     """The default route for all mispelled address : the homepage"""
     return render_template("index.html")
 
-@app.route("/upload", methods=["POST"]) 
+@app.route("/upload", methods=["POST"])
 def upload():
-    """Handle the upload of a file.""" 
-    form = request.form 
- 
-    # Create a unique "session ID" for this particular batch of uploads. 
-    upload_key = str(uuid4()) 
- 
-    # Target folder for these uploads. 
-    target = "static/uploads/{}".format(upload_key) 
-    try: 
-        os.mkdir(target) 
-    except:
-        return "Couldn't create upload directory: {}".format(target) 
- 
-    print("=== Form Data ===") 
-    for key, value in list(form.items()): 
-        print(key, "=>", value) 
- 
-    for file_uploaded in request.files.getlist("file"): 
-        filename = os.path.normcase(file_uploaded.filename) 
-        destination = "/".join([target, filename]) 
-        print("Accept incoming file:", filename) 
-        print("Save it to:", destination) 
-        upload.save(destination) 
+    """Handle the upload of a file."""
+    form = request.form
 
-    return redirect(url_for("upload_complete", uuid=upload_key)) 
- 
-@app.route("/files/<uuid>") 
+    # Create a unique "session ID" for this particular batch of uploads.
+    upload_key = str(uuid4())
+
+    # Target folder for these uploads.
+    target = os.path.join(os.getcwd,"static/uploads/{}".format(upload_key))
+    if not os.path.exists(target):
+        try:
+            print("=== Folder creation ===")
+            os.mkdir(target)
+        except:
+            return "Couldn't create upload directory: {}".format(target)      
+
+    for file_uploaded in request.files.getlist("file"):
+        filename = os.path.normcase(file_uploaded.filename)
+        destination = "/".join([target, filename])
+        print("Accept incoming file:", filename)
+        print("Save it to:", destination)
+        upload.save(destination)
+
+    return redirect(url_for("upload_complete", uuid=upload_key))
+
+@app.route("/files/<uuid>")
 def upload_complete(uuid):
-    """The location we send them to at the end of the upload.""" 
+    """The location we send them to at the end of the upload."""
 
-    # Get their files. 
-    root = "static/uploads/{}".format(uuid) 
-    if not os.path.isdir(root): 
-        return "Error: UUID not found!" 
+    # Get their files.
+    root = "static/uploads/{}".format(uuid)
+    if not os.path.isdir(root):
+        return "Error: UUID not found!"
 
-    files = [] 
-    for file in glob.glob("{}/*.*".format(root)): 
-        fname = file.split(os.sep)[-1] 
-        files.append(fname) 
+    files = []
+    for file in glob.glob("{}/*.*".format(root)):
+        fname = file.split(os.sep)[-1]
+        files.append(fname)
 
-    return render_template("files.html", 
-        uuid=uuid, 
-        files=files, 
-    ) 
+    return render_template("files.html",
+        uuid=uuid,
+        files=files,
+    )
 
 
 ''' @app.route("tts/<uuid>")

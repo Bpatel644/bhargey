@@ -47,65 +47,53 @@
 </template>
 
 <script>
-import * as axios from 'axios';
-
-const BASE_URL = 'http://localhost:5000';
-const url = `${BASE_URL}/upload`;
-
 export default {
-  data () {
+  data() {
     return {
       options: {
-        url: '/upload',
-        paramName: 'file',
+        url: "/upload",
+        paramName: "file",
         uploadMultiple: false,
         maxFiles: 1,
         acceptedFiles: {
-          extensions: ['image/*'],
-          message: 'You are uploading an invalid file'
+          extensions: ["image/*"],
+          message: "You are uploading an invalid file"
         }
       },
       files: [],
-      message: ['Delete', 'Are you sure?', 'Done!'],
+      message: ["Delete", "Are you sure?", "Done!"],
       buttonStatus: 0
-    }
+    };
   },
   methods: {
-    fileAdded (file) {
-      this.files.push(file)
-      return axios.post(url, file)
-        // get data
-        .then(x => x.data)
-        // add url field
-        .then(x => x.map(img => Object.assign({},
-            img, { url: `${BASE_URL}/images/${file.customAttributes.id}`})))
-        .then(console.log)
-        .catch(console.error)
+    fileAdded(file) {
+      this.files.push(file);
     },
-    buttonClassSwitch () {
-      this.buttonStatus++
-      this.buttonStatus = this.buttonStatus % 3
-    }},
+    buttonClassSwitch() {
+      this.buttonStatus++;
+      this.buttonStatus = this.buttonStatus % 3;
+    }
+  },
   computed: {
-    buttonClick () {
+    buttonClick() {
       return {
-        remove: (this.buttonStatus === 0),
-        confirm: (this.buttonStatus === 1),
-        done: (this.buttonStatus === 2)
-      }
+        remove: this.buttonStatus === 0,
+        confirm: this.buttonStatus === 1,
+        done: this.buttonStatus === 2
+      };
     },
-    buttonMessage () {
-      return this.message[this.buttonStatus]
+    buttonMessage() {
+      return this.message[this.buttonStatus];
     },
-    buttonIconClass () {
+    buttonIconClass() {
       return {
-        'fa-trash-alt': this.buttonStatus === 0,
-        'fa-question-circle': this.buttonStatus === 1,
-        'fa-check-circle': this.buttonStatus === 2
-      }
+        "fa-trash-alt": this.buttonStatus === 0,
+        "fa-question-circle": this.buttonStatus === 1,
+        "fa-check-circle": this.buttonStatus === 2
+      };
     }
   }
-}
+};
 </script>
 
 <style>
@@ -221,41 +209,41 @@ button {
 }
 button .icon {
   position: relative;
-  background: #1D242B;
+  background: #1d242b;
   line-height: 30px;
   width: 30px;
   height: 30px;
   text-align: center;
   color: #fff;
   font-size: 18px;
-  -webkit-transition: .2s color;
-  transition: .2s color;
+  -webkit-transition: 0.2s color;
+  transition: 0.2s color;
   border-radius: 2px;
 }
 button .icon .fa {
   width: 30px;
-  -webkit-transition: .2s all;
-  transition: .2s all;
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
 }
 button .icon .fa-check {
-  color: #38B87C;
+  color: #38b87c;
 }
 button .icon .fa-question {
-  color: #2492FF;
+  color: #2492ff;
 }
 button .icon:after {
-  content: ' ';
+  content: " ";
   display: block;
   position: absolute;
   width: 5px;
   height: 5px;
   -webkit-transform: rotate(45deg);
-          transform: rotate(45deg);
-  background: #1D242B;
+  transform: rotate(45deg);
+  background: #1d242b;
   top: 12.5px;
   right: 1px;
-  -webkit-transition: .2s right;
-  transition: .2s right;
+  -webkit-transition: 0.2s right;
+  transition: 0.2s right;
   z-index: 1;
 }
 button .text {
@@ -264,13 +252,13 @@ button .text {
   height: 30px;
   overflow: hidden;
   font-family: "Roboto", sans-serif;
-  background: #F34541;
+  background: #f34541;
   text-align: center;
   line-height: 30px;
   color: #fff;
   font-weight: 300;
-  -webkit-transition: .2s all;
-  transition: .2s all;
+  -webkit-transition: 0.2s all;
+  transition: 0.2s all;
   border-top-right-radius: 2px;
   border-bottom-right-radius: 2px;
 }
@@ -281,12 +269,12 @@ button .text span {
   top: -30px;
   left: 50%;
   -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
-  -webkit-transition: .3s all;
-  transition: .3s all;
+  transform: translateX(-50%);
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
 }
 button:hover .icon {
-  color: #F34541;
+  color: #f34541;
   border-radius: 0;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
@@ -308,13 +296,13 @@ button.confirm .icon {
 }
 button.confirm .icon .fa {
   -webkit-transform: translateY(-30px);
-          transform: translateY(-30px);
+  transform: translateY(-30px);
 }
 button.confirm .icon:after {
   right: -2px;
 }
 button.confirm .text {
-  background: #2492FF;
+  background: #2492ff;
   width: 120px;
 }
 button.confirm .text span {
@@ -328,13 +316,13 @@ button.done .icon {
 }
 button.done .icon .fa {
   -webkit-transform: translateY(-60px);
-          transform: translateY(-60px);
+  transform: translateY(-60px);
 }
 button.done .icon:after {
   right: -2px;
 }
 button.done .text {
-  background: #38B87C;
+  background: #38b87c;
   width: 120px;
 }
 button.done .text span {
@@ -346,12 +334,12 @@ button.done .text span {
   0% {
     opacity: 0;
     -webkit-transform: scale(0.7);
-            transform: scale(0.7);
+    transform: scale(0.7);
   }
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
   }
 }
 
@@ -359,12 +347,12 @@ button.done .text span {
   0% {
     opacity: 0;
     -webkit-transform: scale(0.7);
-            transform: scale(0.7);
+    transform: scale(0.7);
   }
   100% {
     opacity: 1;
     -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
   }
 }
 </style>

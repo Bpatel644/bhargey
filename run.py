@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for 
-from uuid import uuid4 
-import os 
-import json 
+import os
 import glob
 import sys
+
+from flask import Flask, render_template, request, redirect, url_for
+from uuid import uuid4
+
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
@@ -13,48 +14,39 @@ app = Flask(__name__,
 
 @app.route('/', defaults={'path': ''})
 def catch_all(path):
+    """The default route for all mispelled address : the homepage"""
     return render_template("index.html")
 
 @app.route("/upload", methods=["POST"]) 
-def upload(): 
+def upload():
     """Handle the upload of a file.""" 
     form = request.form 
  
     # Create a unique "session ID" for this particular batch of uploads. 
     upload_key = str(uuid4()) 
  
-    # Is the upload using Ajax, or a direct POST by the form? 
-    is_ajax = False 
-    if form.get("__ajax", None) == "true": 
-        is_ajax = True 
- 
     # Target folder for these uploads. 
     target = "static/uploads/{}".format(upload_key) 
     try: 
         os.mkdir(target) 
-    except: 
-        if is_ajax: 
-            return ajax_response(False, "Couldn't create upload directory: {}".format(target)) 
-        else: 
-            return "Couldn't create upload directory: {}".format(target) 
+    except:
+        return "Couldn't create upload directory: {}".format(target) 
  
     print("=== Form Data ===") 
     for key, value in list(form.items()): 
         print(key, "=>", value) 
  
-    for upload in request.files.getlist("file"): 
-        filename = os.path.normcase(upload.filename) 
+    for file_uploaded in request.files.getlist("file"): 
+        filename = os.path.normcase(file_uploaded.filename) 
         destination = "/".join([target, filename]) 
         print("Accept incoming file:", filename) 
-        print("Save it to:", filename) 
-        upload.save(filename) 
-    if is_ajax: 
-        return ajax_response(True, upload_key) 
-    else: 
-        return redirect(url_for("upload_complete", uuid=upload_key)) 
+        print("Save it to:", destination) 
+        upload.save(destination) 
+
+    return redirect(url_for("upload_complete", uuid=upload_key)) 
  
 @app.route("/files/<uuid>") 
-def upload_complete(uuid): 
+def upload_complete(uuid):
     """The location we send them to at the end of the upload.""" 
 
     # Get their files. 
@@ -71,10 +63,11 @@ def upload_complete(uuid):
         uuid=uuid, 
         files=files, 
     ) 
- 
-def ajax_response(status, msg): 
-    status_code = "ok" if status else "error" 
-    return json.dumps(dict( 
-        status=status_code, 
-        msg=msg, 
-    )) 
+
+
+''' @app.route("tts/<uuid>")
+def tts(text, uuid):
+    """The function handling the text-to-speech operation"""
+    tts_result = gTTS(text=text, lang='en', slow=True)
+    tts_result.save("{}.mp3".format(uuid))
+    return render_template("tts.html") '''

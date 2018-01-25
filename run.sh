@@ -1,6 +1,6 @@
-#!/bin/sh
-set -
-
+#!/usr/bin/env bash
+set -x
+set -e
 cd frontend;
 npm run build && \
 cd ..;\

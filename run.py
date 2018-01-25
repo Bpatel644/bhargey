@@ -26,7 +26,7 @@ def upload():
     upload_key = str(uuid4())
 
     # Target folder for these uploads.
-    target = os.path.join(os.getcwd,"static/uploads/{}".format(upload_key))
+    target = os.path.join(os.getcwd(),"static/uploads/{}".format(upload_key))
     if not os.path.exists(target):
         try:
             print("=== Folder creation ===")
@@ -40,6 +40,7 @@ def upload():
         print("Accept incoming file:", filename)
         print("Save it to:", destination)
         upload.save(destination)
+        file_uploaded.save(destination)
 
     return redirect(url_for("upload_complete", uuid=upload_key))
 

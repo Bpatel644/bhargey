@@ -22,7 +22,7 @@ export default {
   margin-bottom: 60px;
 }
 img {
-  width: 75%;
-  padding: 10%;
+  width: 37%;
+  padding: 7%;
 }
 </style>

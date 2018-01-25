@@ -135,7 +135,7 @@ body {
 }
 
 .uploader-files {
-  min-height: 35rem;
+  min-height: 25rem;
   flex: 1;
   padding: 40px;
 }

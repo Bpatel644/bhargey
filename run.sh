@@ -18,10 +18,18 @@ backend() {
     FLASK_APP=run.py FLASK_DEBUG=1 flask run &&\
     cd ..;
 }
+install() {
+    cd backend;
+    pip install -r requirements.txt &&\
+    cd ../frontend;
+    npm i &&\
+    cd ..;
+}
 
 # Testing what to build in regards to the options passed
 case "$1" in
     -f) frontend ;; # Building only the frontend
     -b) backend ;; # Building only the backend
+    -i) install ;; # Making a fresh install
     *) frontend && backend ;; # Building both if any other options is passed
 esac

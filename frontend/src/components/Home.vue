@@ -47,6 +47,11 @@
 </template>
 
 <script>
+import * as axios from 'axios';
+
+const BASE_URL = 'http://localhost:5000';
+const url = `${BASE_URL}/upload`;
+
 export default {
   data () {
     return {
@@ -68,9 +73,12 @@ export default {
   methods: {
     fileAdded (file) {
       this.files.push(file)
-      this
-        .$http
-        .post(`upload/${file.customAttributes.id}`)
+      return axios.post(url, file)
+        // get data
+        .then(x => x.data)
+        // add url field
+        .then(x => x.map(img => Object.assign({},
+            img, { url: `${BASE_URL}/images/${file.customAttributes.id}`})))
         .then(console.log)
         .catch(console.error)
     },
